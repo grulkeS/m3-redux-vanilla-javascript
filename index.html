@@ -1,61 +1,91 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Redux basic example</title>
-    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
-  </head>
-  <body>
-    <div id="body">
-     
-    </div>
-    <script>
-      console.log("Script started");
-      let initial = {
-          counter:0
-      }
 
-      function reducerFunction(state = initial, action) {
-        let newState = JSON.parse(JSON.stringify(state));
-        console.log("copy of state:"+JSON.stringify(state));
-        switch (action.type) {
-          case 'INCREMENT':
-            newState.counter +=1;  
-            return newState;
-          case 'DECREMENT':
-            newState.counter -=1;  
-            return newState;
-          default:
-            return newState
-        }
+<head>
+  <title>Redux basic example</title>
+  <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+</head>
+
+<body>
+  <div id="body">
+
+  </div>
+  <script>
+    console.log("Script started");
+    let initial = {
+      counter: 0,
+      increaseBy: 1
+    }
+
+    function reducerFunction(state = initial, action) {
+      let newState = JSON.parse(JSON.stringify(state));
+      console.log("copy of state:" + JSON.stringify(state));
+      switch (action.type) {
+        case 'INCREMENT':
+          newState.counter += state.increaseBy;
+          return newState;
+        case 'DECREMENT':
+          newState.counter -= state.increaseBy;
+          return newState;
+        case 'Increase':
+          newState.increaseBy += 1
+          return newState;
+        case 'Decrease':
+          newState.increaseBy -= 1
+          return newState;
+        default:
+          return newState
       }
-     
-      var store = Redux.createStore(reducerFunction)
-      var body = document.getElementById('body')
-      function render() {
-        console.log("DOM will be updated");
-        body.innerHTML = `
+    }
+
+
+
+
+    var store = Redux.createStore(reducerFunction)
+    var body = document.getElementById('body')
+    function render() {
+      console.log("DOM will be updated");
+      body.innerHTML = `
             <p>
                 Clicked: <span id="value">${store.getState().counter.toString()}</span> times
                 <button id="increment" onclick="increment()">+</button>
                 <button id="decrement" onclick="decrement()">-</button>
-            </p>
+                <br>
+                <br>
+                increasing counter by: ${store.getState().increaseBy.toString()}
+                <button id="increase" onclick="increaseby()">+</button>
+                <button id="decrease" onclick="decreaseby()">-</button>
+
         `
-      }
+    }
 
-      function increment(){
-        const incrementAction = { type: 'INCREMENT' };
-        store.dispatch(incrementAction)
-      }
+    function increment() {
+      const incrementAction = { type: 'INCREMENT' };
+      store.dispatch(incrementAction)
+    }
 
-      function decrement(){
-        const decrementAction = { type: 'DECREMENT' };
-        store.dispatch(decrementAction)
-      }
+    function decrement() {
+      const decrementAction = { type: 'DECREMENT' };
+      store.dispatch(decrementAction)
+    }
 
-      render()
-      store.subscribe(render)
+    function increaseby() {
+      const increaseAction = { type: 'Increase' };
+      store.dispatch(increaseAction)
+    }
 
-     
-    </script>
-  </body>
+    function decreaseby() {
+      const decreaseAction = { type: 'Decrease' };
+      store.dispatch(decreaseAction)
+    }
+
+    
+
+    render()
+    store.subscribe(render)
+
+
+  </script>
+</body>
+
 </html>
